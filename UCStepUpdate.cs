@@ -290,10 +290,11 @@ namespace TseClient {
 						numArray2[index3][1] = numArray1[index2 * 20 + index3][1];
 						numArray2[index3][2] = numArray1[index2 * 20 + index3][2];
 					}
-					string str2 = "";
+					string insCodes = "";
 					foreach (long[] numArray3 in numArray2)
-						str2 = str2 + numArray3[0] + "," + numArray3[1] + "," + numArray3[2] + ";";
-					string insturmentClosingPrice = ServerMethods.GetInsturmentClosingPrice(str2.Substring(0, str2.Length - 1));
+						insCodes += numArray3[0] + "," + numArray3[1] + "," + numArray3[2] + ";";
+					insCodes = insCodes.Substring(0, insCodes.Length - 1);
+          string insturmentClosingPrice = ServerMethods.GetInsturmentClosingPrice(insCodes);
 					if (insturmentClosingPrice.Equals("*")) {
 						if (this.isVisual) {
 							this.rtbOperationLog.AppendText("\n\tبروز رسانی اطلاعات در حد فاصل ساعت هشت صبح تا یک بعد از ظهر روزهای شنبه تا چهارشنبه امکان پذیر نمی باشد.");
