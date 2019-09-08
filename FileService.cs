@@ -326,9 +326,10 @@ namespace TseClient {
 			FileService.CheckAppFolder();
 			int num = 0;
 			try {
-				if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\Instruments\\" + insCode + ".csv"))
+				string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\Instruments\\" + insCode + ".csv";
+        if ( !File.Exists(path) )
 					return 0;
-				using (StreamReader streamReader = new StreamReader((Stream)File.OpenRead(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\Instruments\\" + insCode + ".csv"))) {
+				using ( StreamReader streamReader = new StreamReader(File.OpenRead(path)) ) {
 					string str = "";
 					while (!streamReader.EndOfStream)
 						str = streamReader.ReadLine();
