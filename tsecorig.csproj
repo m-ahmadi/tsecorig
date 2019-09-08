@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!--Project was exported from assembly: D:\Program Files\TseClient 2.0\TseClient.exe-->
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -8,9 +8,28 @@
     <OutputType>WinExe</OutputType>
     <AssemblyName>TseClient</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ApplicationVersion>2.0.16.0</ApplicationVersion>
     <FileAlignment>512</FileAlignment>
     <RootNamespace>TseClient</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>2.0.16.0</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -42,9 +61,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Utility.cs" />
-    <Compile Include="UCStepUpdate.cs" />
-    <Compile Include="UCStepSettings.cs" />
-    <Compile Include="MainForm.cs" />
+    <Compile Include="UCStepUpdate.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UCStepSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="StaticData.cs" />
     <Compile Include="calendarTypes.cs" />
     <Compile Include="cDate.cs" />
@@ -56,10 +81,18 @@
     <Compile Include="Tabs.cs" />
     <Compile Include="AdjustPricesCondition.cs" />
     <Compile Include="ServerMethods.cs" />
-    <Compile Include="UCStepInstruments.cs" />
-    <Compile Include="ConfirmationForm.cs" />
-    <Compile Include="UCInstruments.cs" />
-    <Compile Include="SettingsContainerForms.cs" />
+    <Compile Include="UCStepInstruments.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConfirmationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UCInstruments.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SettingsContainerForms.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ColumnInfo.cs" />
     <Compile Include="ColumnsFileReadResult.cs" />
     <Compile Include="InstrumentInfo.cs" />
@@ -92,6 +125,13 @@
     <EmbeddedResource Include="UCStepInstruments.resx" />
     <EmbeddedResource Include="UCStepSettings.resx" />
     <EmbeddedResource Include="UCStepUpdate.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
