@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: D:\Program Files\TseClient 2.0\TseClient.exe-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{47532123-9850-41CC-B905-D6F236137E32}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>TseClient</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ApplicationVersion>2.0.16.0</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>TseClient</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="ExcelLibrary">
+      <HintPath>lib\ExcelLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Utility.cs" />
+    <Compile Include="UCStepUpdate.cs" />
+    <Compile Include="UCStepSettings.cs" />
+    <Compile Include="MainForm.cs" />
+    <Compile Include="StaticData.cs" />
+    <Compile Include="calendarTypes.cs" />
+    <Compile Include="cDate.cs" />
+    <Compile Include="FormFillMethods.cs" />
+    <Compile Include="FileNameOption.cs" />
+    <Compile Include="EncodingOption.cs" />
+    <Compile Include="ColumnType.cs" />
+    <Compile Include="FileReadResult.cs" />
+    <Compile Include="Tabs.cs" />
+    <Compile Include="AdjustPricesCondition.cs" />
+    <Compile Include="ServerMethods.cs" />
+    <Compile Include="UCStepInstruments.cs" />
+    <Compile Include="ConfirmationForm.cs" />
+    <Compile Include="UCInstruments.cs" />
+    <Compile Include="SettingsContainerForms.cs" />
+    <Compile Include="ColumnInfo.cs" />
+    <Compile Include="ColumnsFileReadResult.cs" />
+    <Compile Include="InstrumentInfo.cs" />
+    <Compile Include="ClosingPriceInfo.cs" />
+    <Compile Include="TseShareInfo.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="FileService.cs" />
+    <Compile Include="SilentExecuter.cs" />
+    <Compile Include="Properties\Resources.cs" />
+    <Compile Include="Properties\Settings.cs" />
+    <Compile Include="ServerSerive\WebServiceTseClient.cs" />
+    <Compile Include="ServerSerive\LastPossibleDevenCompletedEventHandler.cs" />
+    <Compile Include="ServerSerive\LastPossibleDevenCompletedEventArgs.cs" />
+    <Compile Include="ServerSerive\InstrumentCompletedEventHandler.cs" />
+    <Compile Include="ServerSerive\InstrumentCompletedEventArgs.cs" />
+    <Compile Include="ServerSerive\DecompressAndGetInsturmentClosingPriceCompletedEve.cs" />
+    <Compile Include="ServerSerive\1DecompressAndGetInsturmentClosingPriceCompletedEve.cs" />
+    <Compile Include="ServerSerive\LogErrorCompletedEventHandler.cs" />
+    <Compile Include="ServerSerive\LogErrorCompletedEventArgs.cs" />
+    <Compile Include="ServerSerive\InstrumentAndShareCompletedEventHandler.cs" />
+    <Compile Include="ServerSerive\InstrumentAndShareCompletedEventArgs.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ConfirmationForm.resx" />
+    <EmbeddedResource Include="MainForm.resx" />
+    <EmbeddedResource Include="Properties\Resources.resx" />
+    <EmbeddedResource Include="SettingsContainerForms.resx" />
+    <EmbeddedResource Include="UCInstruments.resx" />
+    <EmbeddedResource Include="UCStepInstruments.resx" />
+    <EmbeddedResource Include="UCStepSettings.resx" />
+    <EmbeddedResource Include="UCStepUpdate.resx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
