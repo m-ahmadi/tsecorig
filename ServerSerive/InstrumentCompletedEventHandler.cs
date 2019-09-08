@@ -6,10 +6,9 @@
 
 using System.CodeDom.Compiler;
 
-namespace TseClient.ServerSerive
-{
-  [GeneratedCode("System.Web.Services", "4.0.30319.1")]
-  public delegate void InstrumentCompletedEventHandler(
-    object sender,
-    InstrumentCompletedEventArgs e);
+namespace TseClient.ServerSerive {
+	[GeneratedCode("System.Web.Services", "4.0.30319.1")]
+	public delegate void InstrumentCompletedEventHandler(
+		object sender,
+		InstrumentCompletedEventArgs e);
 }

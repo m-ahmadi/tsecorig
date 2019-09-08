@@ -8,29 +8,24 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace TseClient
-{
-  internal static class Program
-  {
-    private const int ATTACH_PARENT_PROCESS = -1;
+namespace TseClient {
+	internal static class Program {
+		private const int ATTACH_PARENT_PROCESS = -1;
 
-    [DllImport("kernel32.dll")]
-    private static extern bool AttachConsole(int dwProcessId);
+		[DllImport("kernel32.dll")]
+		private static extern bool AttachConsole(int dwProcessId);
 
-    [STAThread]
-    private static void Main(string[] args)
-    {
-      Program.AttachConsole(-1);
-      if (args.Length == 0)
-      {
-        Application.EnableVisualStyles();
-        Application.SetCompatibleTextRenderingDefault(false);
-        Application.Run((Form) new MainForm());
-      }
-      else if (args[0].ToLower().Equals("fast"))
-        new SilentExecuter().Execute();
-      else
-        Console.WriteLine("\nInvalid parameter");
-    }
-  }
+		[STAThread]
+		private static void Main(string[] args) {
+			Program.AttachConsole(-1);
+			if (args.Length == 0) {
+				Application.EnableVisualStyles();
+				Application.SetCompatibleTextRenderingDefault(false);
+				Application.Run((Form)new MainForm());
+			} else if (args[0].ToLower().Equals("fast"))
+				new SilentExecuter().Execute();
+			else
+				Console.WriteLine("\nInvalid parameter");
+		}
+	}
 }

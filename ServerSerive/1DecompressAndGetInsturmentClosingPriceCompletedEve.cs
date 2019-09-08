@@ -9,32 +9,27 @@ using System.CodeDom.Compiler;
 using System.ComponentModel;
 using System.Diagnostics;
 
-namespace TseClient.ServerSerive
-{
-  [GeneratedCode("System.Web.Services", "4.0.30319.1")]
-  [DesignerCategory("code")]
-  [DebuggerStepThrough]
-  public class DecompressAndGetInsturmentClosingPriceCompletedEventArgs : AsyncCompletedEventArgs
-  {
-    private object[] results;
+namespace TseClient.ServerSerive {
+	[GeneratedCode("System.Web.Services", "4.0.30319.1")]
+	[DesignerCategory("code")]
+	[DebuggerStepThrough]
+	public class DecompressAndGetInsturmentClosingPriceCompletedEventArgs : AsyncCompletedEventArgs {
+		private object[] results;
 
-    internal DecompressAndGetInsturmentClosingPriceCompletedEventArgs(
-      object[] results,
-      Exception exception,
-      bool cancelled,
-      object userState)
-      : base(exception, cancelled, userState)
-    {
-      this.results = results;
-    }
+		internal DecompressAndGetInsturmentClosingPriceCompletedEventArgs(
+			object[] results,
+			Exception exception,
+			bool cancelled,
+			object userState)
+			: base(exception, cancelled, userState) {
+			this.results = results;
+		}
 
-    public string Result
-    {
-      get
-      {
-        this.RaiseExceptionIfNecessary();
-        return (string) this.results[0];
-      }
-    }
-  }
+		public string Result {
+			get {
+				this.RaiseExceptionIfNecessary();
+				return (string)this.results[0];
+			}
+		}
+	}
 }

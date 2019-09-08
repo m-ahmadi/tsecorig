@@ -4,16 +4,14 @@
 // MVID: 55DBD486-C597-460B-B54A-EAFCAFB4B891
 // Assembly location: D:\Program Files\TseClient 2.0\TseClient.exe
 
-namespace TseClient
-{
-  public class ColumnInfo
-  {
-    public int Index { get; set; }
+namespace TseClient {
+	public class ColumnInfo {
+		public int Index { get; set; }
 
-    public ColumnType Type { get; set; }
+		public ColumnType Type { get; set; }
 
-    public string Header { get; set; }
+		public string Header { get; set; }
 
-    public bool Visible { get; set; }
-  }
+		public bool Visible { get; set; }
+	}
 }

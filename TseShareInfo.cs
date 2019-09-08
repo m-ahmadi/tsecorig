@@ -6,18 +6,16 @@
 
 using System;
 
-namespace TseClient
-{
-  public class TseShareInfo
-  {
-    public long Idn { get; set; }
+namespace TseClient {
+	public class TseShareInfo {
+		public long Idn { get; set; }
 
-    public long InsCode { get; set; }
+		public long InsCode { get; set; }
 
-    public int DEven { get; set; }
+		public int DEven { get; set; }
 
-    public Decimal NumberOfShareNew { get; set; }
+		public Decimal NumberOfShareNew { get; set; }
 
-    public Decimal NumberOfShareOld { get; set; }
-  }
+		public Decimal NumberOfShareOld { get; set; }
+	}
 }

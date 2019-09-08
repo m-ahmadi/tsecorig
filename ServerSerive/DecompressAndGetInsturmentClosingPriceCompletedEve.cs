@@ -6,10 +6,9 @@
 
 using System.CodeDom.Compiler;
 
-namespace TseClient.ServerSerive
-{
-  [GeneratedCode("System.Web.Services", "4.0.30319.1")]
-  public delegate void DecompressAndGetInsturmentClosingPriceCompletedEventHandler(
-    object sender,
-    DecompressAndGetInsturmentClosingPriceCompletedEventArgs e);
+namespace TseClient.ServerSerive {
+	[GeneratedCode("System.Web.Services", "4.0.30319.1")]
+	public delegate void DecompressAndGetInsturmentClosingPriceCompletedEventHandler(
+		object sender,
+		DecompressAndGetInsturmentClosingPriceCompletedEventArgs e);
 }
