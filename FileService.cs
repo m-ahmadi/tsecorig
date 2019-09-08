@@ -485,6 +485,7 @@ namespace TseClient {
 				}
 			}
 			List<ColumnInfo> columnInfoList = FileService.ColumnsInfo();
+			//Encoding utF8 = Encoding.UTF8; // unnecessary
 			Encoding encoding;
 			switch (Convert.ToInt32(settings.Encoding)) {
 				case 0:
