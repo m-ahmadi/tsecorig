@@ -17,12 +17,13 @@ namespace TseClient
   {
     public static void CheckAppFolder()
     {
-      if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)) || !Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files"))
+      string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+      if (!Directory.Exists(appData) || !Directory.Exists(appData + "\\TseClient 2.0\\Files"))
       {
         Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
         Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files");
         Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\Instruments");
-        foreach (string file in Directory.GetFiles("Files"))
+        foreach (string file in Directory.GetFiles(appData + "\\TseClient 2.0\\Files"))
           File.Copy(file, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\" + Path.GetFileName(file));
         if (Directory.Exists("Files\\Instruments"))
         {
@@ -30,7 +31,7 @@ namespace TseClient
             File.Copy(file, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\Instruments\\" + Path.GetFileName(file));
         }
       }
-      foreach (string file in Directory.GetFiles("Files"))
+      foreach (string file in Directory.GetFiles(appData + "\\TseClient 2.0\\Files"))
       {
         if (!File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\" + Path.GetFileName(file)))
           File.Copy(file, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\" + Path.GetFileName(file));
