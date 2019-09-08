@@ -432,22 +432,22 @@ namespace TseClient {
 			string filename = "";
 			switch (Convert.ToInt32(filenameType)) {
 				case 0:
-					filename = instrument.CIsin + FileService.GetSuffix(YMarNSC, AdjustPricesCondition);
+					filename = instrument.CIsin       + GetSuffix(YMarNSC, AdjustPricesCondition);
 					break;
 				case 1:
-					filename = instrument.LatinName + FileService.GetSuffix(YMarNSC, AdjustPricesCondition);
+					filename = instrument.LatinName   + GetSuffix(YMarNSC, AdjustPricesCondition);
 					break;
 				case 2:
-					filename = instrument.LatinSymbol + FileService.GetSuffix(YMarNSC, AdjustPricesCondition);
+					filename = instrument.LatinSymbol + GetSuffix(YMarNSC, AdjustPricesCondition);
 					break;
 				case 3:
-					filename = instrument.Name + FileService.GetSuffix(YMarNSC, AdjustPricesCondition, true);
+					filename = instrument.Name        + GetSuffix(YMarNSC, AdjustPricesCondition, true);
 					break;
 				case 4:
-					filename = instrument.Symbol + FileService.GetSuffix(YMarNSC, AdjustPricesCondition, true);
+					filename = instrument.Symbol      + GetSuffix(YMarNSC, AdjustPricesCondition, true);
 					break;
 				default:
-					filename = instrument.CIsin + FileService.GetSuffix(YMarNSC, AdjustPricesCondition);
+					filename = instrument.CIsin       + GetSuffix(YMarNSC, AdjustPricesCondition);
 					break;
 			}
 			return filename;
@@ -460,8 +460,8 @@ namespace TseClient {
 			if (settings.AdjustPricesCondition == 1 || settings.AdjustPricesCondition == 2)
 				storageLocation = settings.AdjustedStorageLocation;
 			string delimiter = settings.Delimeter.ToString();
-			string filename = FileService.GetFilename(instrument, settings.FileName, settings.AdjustPricesCondition);
-			filename = filename.Replace('\\', ' ').Replace('/', ' ').Replace('*', ' ').Replace(':', ' ').Replace('>', ' ').Replace('<', ' ').Replace('?', ' ').Replace('|', ' ').Replace('^', ' ').Replace('"', ' ');
+			string filename = GetFilename(instrument, settings.FileName, settings.AdjustPricesCondition);
+			filename = SafeWinFilename(filename);
 			int outputFileLastDeven = 0;
 			if (appendExistingFile) {
 				if (!File.Exists(storageLocation + "\\" + filename + "." + settings.FileExtension)) {
@@ -484,7 +484,7 @@ namespace TseClient {
 				}
 			}
 			List<ColumnInfo> columnInfoList = FileService.ColumnsInfo();
-			//Encoding utF8 = Encoding.UTF8; // unnecessary
+			//Encoding utF8 = Encoding.UTF8; // unused
 			Encoding encoding;
 			switch (Convert.ToInt32(settings.Encoding)) {
 				case 0:
@@ -580,104 +580,21 @@ namespace TseClient {
 
 		public static void RenameOutputFiles() {
 			FileService.CheckAppFolder();
-			// ISSUE: object of a compiler-generated type is created
-			// ISSUE: variable of a compiler-generated type
 			Settings settings = new Settings();
-			string str1 = settings.StorageLocation;
+			string storageLocation = settings.StorageLocation;
 			if (settings.AdjustPricesCondition == 1 || settings.AdjustPricesCondition == 2)
-				str1 = settings.AdjustedStorageLocation;
+				storageLocation = settings.AdjustedStorageLocation;
 			foreach (InstrumentInfo instrument in StaticData.Instruments) {
-				string str2;
-				switch (Convert.ToInt32(settings.FileName)) {
-					case 0:
-						str2 = instrument.CIsin;
-						if (instrument.YMarNSC != "ID") {
-							if (settings.AdjustPricesCondition == 1) {
-								str2 += "-a";
-								break;
-							}
-							if (settings.AdjustPricesCondition == 2) {
-								str2 += "-i";
-								break;
-							}
-							break;
-						}
-						break;
-					case 1:
-						str2 = instrument.LatinName;
-						if (instrument.YMarNSC != "ID") {
-							if (settings.AdjustPricesCondition == 1) {
-								str2 += "-a";
-								break;
-							}
-							if (settings.AdjustPricesCondition == 2) {
-								str2 += "-i";
-								break;
-							}
-							break;
-						}
-						break;
-					case 2:
-						str2 = instrument.LatinSymbol;
-						if (instrument.YMarNSC != "ID") {
-							if (settings.AdjustPricesCondition == 1) {
-								str2 += "-a";
-								break;
-							}
-							if (settings.AdjustPricesCondition == 2) {
-								str2 += "-i";
-								break;
-							}
-							break;
-						}
-						break;
-					case 3:
-						str2 = instrument.Name;
-						if (instrument.YMarNSC != "ID") {
-							if (settings.AdjustPricesCondition == 1) {
-								str2 += "-ت";
-								break;
-							}
-							if (settings.AdjustPricesCondition == 2) {
-								str2 += "-ا";
-								break;
-							}
-							break;
-						}
-						break;
-					case 4:
-						str2 = instrument.Symbol;
-						if (instrument.YMarNSC != "ID") {
-							if (settings.AdjustPricesCondition == 1) {
-								str2 += "-ت";
-								break;
-							}
-							if (settings.AdjustPricesCondition == 2) {
-								str2 += "-ا";
-								break;
-							}
-							break;
-						}
-						break;
-					default:
-						str2 = instrument.CIsin;
-						if (instrument.YMarNSC != "ID") {
-							if (settings.AdjustPricesCondition == 1) {
-								str2 += "-a";
-								break;
-							}
-							if (settings.AdjustPricesCondition == 2) {
-								str2 += "-i";
-								break;
-							}
-							break;
-						}
-						break;
-				}
-				string str3 = str2.Replace('\\', ' ').Replace('/', ' ').Replace('*', ' ').Replace(':', ' ').Replace('>', ' ').Replace('<', ' ').Replace('?', ' ').Replace('|', ' ').Replace('^', ' ').Replace('"', ' ');
-				if (File.Exists(str1 + "\\" + str3 + "." + settings.FileExtension)) {
-					File.Copy(str1 + "\\" + str3 + "." + settings.FileExtension, str1 + "\\" + str3 + "[" + (object)DateTime.Now.Year + "-" + DateTime.Now.Month.ToString("00") + "-" + DateTime.Now.Day.ToString("00") + "-" + (object)DateTime.Now.Hour + "-" + DateTime.Now.Minute.ToString("00") + "-" + DateTime.Now.Second.ToString("00") + "]." + settings.FileExtension);
-					File.Delete(str1 + "\\" + str3 + "." + settings.FileExtension);
+				string ext = settings.FileExtension;
+				string filename = GetFilename(instrument, settings.FileName, settings.AdjustPricesCondition);
+				filename = SafeWinFilename(filename);
+				string targetPath = storageLocation + "\\" + filename + "." + ext;
+
+				if ( File.Exists(targetPath) ) {
+					DateTime now = DateTime.Now;
+					string suffix = "[" + now.Year + "-" + now.Month.ToString("00") + "-" + now.Day.ToString("00") + "-" + now.Hour + "-" + now.Minute.ToString("00") + "-" + now.Second.ToString("00") + "].";
+          File.Copy(targetPath, storageLocation + "\\" + filename + suffix + ext);
+					File.Delete(targetPath);
 				}
 			}
 		}
@@ -690,11 +607,11 @@ namespace TseClient {
 				string str1 = settings.StorageLocation;
 				if (settings.AdjustPricesCondition == 1 || settings.AdjustPricesCondition == 2)
 					str1 = settings.AdjustedStorageLocation;
-				string str2 = FileService.GetFilename(instrument, settings.FileName, settings.AdjustPricesCondition);
-				string str3 = str2.Replace('\\', ' ').Replace('/', ' ').Replace('*', ' ').Replace(':', ' ').Replace('>', ' ').Replace('<', ' ').Replace('?', ' ').Replace('|', ' ').Replace('^', ' ').Replace('"', ' ');
-				if (!File.Exists(str1 + "\\" + str3 + "." + settings.FileExtension))
+				string filename = GetFilename(instrument, settings.FileName, settings.AdjustPricesCondition);
+				filename = SafeWinFilename(filename);
+				if (!File.Exists(str1 + "\\" + filename + "." + settings.FileExtension))
 					return 0;
-				using (StreamReader streamReader = new StreamReader((Stream)File.OpenRead(str1 + "\\" + str3 + "." + settings.FileExtension))) {
+				using (StreamReader streamReader = new StreamReader((Stream)File.OpenRead(str1 + "\\" + filename + "." + settings.FileExtension))) {
 					string str4 = "";
 					while (!streamReader.EndOfStream)
 						str4 = streamReader.ReadLine();
@@ -1000,6 +917,10 @@ namespace TseClient {
 				}
 				text.Flush();
 			}
+		}
+
+		public static string SafeWinFilename(string input) {
+			return input.Replace('\\', ' ').Replace('/', ' ').Replace('*', ' ').Replace(':', ' ').Replace('>', ' ').Replace('<', ' ').Replace('?', ' ').Replace('|', ' ').Replace('^', ' ').Replace('"', ' ');
 		}
 	}
 }
