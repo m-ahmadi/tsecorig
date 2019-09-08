@@ -416,109 +416,56 @@ namespace TseClient {
 			}
 		}
 
-		public static void WriteOutputFile(
-			InstrumentInfo instrument,
-			List<ClosingPriceInfo> cp,
-			bool appendExistingFile) {
-			FileService.CheckAppFolder();
-			// ISSUE: object of a compiler-generated type is created
-			// ISSUE: variable of a compiler-generated type
-			Settings settings = new Settings();
-			string str1 = settings.StorageLocation;
-			if (settings.AdjustPricesCondition == 1 || settings.AdjustPricesCondition == 2)
-				str1 = settings.AdjustedStorageLocation;
-			string str2 = settings.Delimeter.ToString();
-			string str3;
-			switch (Convert.ToInt32(settings.FileName)) {
+		public static string GetSuffix(string YMarNSC, int AdjustPricesCondition, bool fa = false) {
+			string suffx = "";
+			if (YMarNSC != "ID") {
+				if (AdjustPricesCondition == 1) {
+					suffx = fa ? "-ت" : "-a";
+				} else if (AdjustPricesCondition == 2) {
+					suffx = fa ? "-ا" : "-i";
+				}
+			}
+			return suffx;
+		}
+
+		public static string GetFilename(InstrumentInfo instrument, string filenameType, int AdjustPricesCondition) {
+			string YMarNSC = instrument.YMarNSC;
+			string filename = "";
+			switch (Convert.ToInt32(filenameType)) {
 				case 0:
-					str3 = instrument.CIsin;
-					if (instrument.YMarNSC != "ID") {
-						if (settings.AdjustPricesCondition == 1) {
-							str3 += "-a";
-							break;
-						}
-						if (settings.AdjustPricesCondition == 2) {
-							str3 += "-i";
-							break;
-						}
-						break;
-					}
+					filename = instrument.CIsin + FileService.GetSuffix(YMarNSC, AdjustPricesCondition);
 					break;
 				case 1:
-					str3 = instrument.LatinName;
-					if (instrument.YMarNSC != "ID") {
-						if (settings.AdjustPricesCondition == 1) {
-							str3 += "-a";
-							break;
-						}
-						if (settings.AdjustPricesCondition == 2) {
-							str3 += "-i";
-							break;
-						}
-						break;
-					}
+					filename = instrument.LatinName + FileService.GetSuffix(YMarNSC, AdjustPricesCondition);
 					break;
 				case 2:
-					str3 = instrument.LatinSymbol;
-					if (instrument.YMarNSC != "ID") {
-						if (settings.AdjustPricesCondition == 1) {
-							str3 += "-a";
-							break;
-						}
-						if (settings.AdjustPricesCondition == 2) {
-							str3 += "-i";
-							break;
-						}
-						break;
-					}
+					filename = instrument.LatinSymbol + FileService.GetSuffix(YMarNSC, AdjustPricesCondition);
 					break;
 				case 3:
-					str3 = instrument.Name;
-					if (instrument.YMarNSC != "ID") {
-						if (settings.AdjustPricesCondition == 1) {
-							str3 += "-ت";
-							break;
-						}
-						if (settings.AdjustPricesCondition == 2) {
-							str3 += "-ا";
-							break;
-						}
-						break;
-					}
+					filename = instrument.Name + FileService.GetSuffix(YMarNSC, AdjustPricesCondition, true);
 					break;
 				case 4:
-					str3 = instrument.Symbol;
-					if (instrument.YMarNSC != "ID") {
-						if (settings.AdjustPricesCondition == 1) {
-							str3 += "-ت";
-							break;
-						}
-						if (settings.AdjustPricesCondition == 2) {
-							str3 += "-ا";
-							break;
-						}
-						break;
-					}
+					filename = instrument.Symbol + FileService.GetSuffix(YMarNSC, AdjustPricesCondition, true);
 					break;
 				default:
-					str3 = instrument.CIsin;
-					if (instrument.YMarNSC != "ID") {
-						if (settings.AdjustPricesCondition == 1) {
-							str3 += "-a";
-							break;
-						}
-						if (settings.AdjustPricesCondition == 2) {
-							str3 += "-i";
-							break;
-						}
-						break;
-					}
+					filename = instrument.CIsin + FileService.GetSuffix(YMarNSC, AdjustPricesCondition);
 					break;
 			}
-			string str4 = str3.Replace('\\', ' ').Replace('/', ' ').Replace('*', ' ').Replace(':', ' ').Replace('>', ' ').Replace('<', ' ').Replace('?', ' ').Replace('|', ' ').Replace('^', ' ').Replace('"', ' ');
-			int num = 0;
+			return filename;
+		}
+
+		public static void WriteOutputFile(InstrumentInfo instrument, List<ClosingPriceInfo> cp, bool appendExistingFile) {
+			FileService.CheckAppFolder();
+			Settings settings = new Settings();
+			string storageLocation = settings.StorageLocation;
+			if (settings.AdjustPricesCondition == 1 || settings.AdjustPricesCondition == 2)
+				storageLocation = settings.AdjustedStorageLocation;
+			string delimiter = settings.Delimeter.ToString();
+			string filename = FileService.GetFilename(instrument, settings.FileName, settings.AdjustPricesCondition);
+			filename = filename.Replace('\\', ' ').Replace('/', ' ').Replace('*', ' ').Replace(':', ' ').Replace('>', ' ').Replace('<', ' ').Replace('?', ' ').Replace('|', ' ').Replace('^', ' ').Replace('"', ' ');
+			int outputFileLastDeven = 0;
 			if (appendExistingFile) {
-				if (!File.Exists(str1 + "\\" + str4 + "." + settings.FileExtension)) {
+				if (!File.Exists(storageLocation + "\\" + filename + "." + settings.FileExtension)) {
 					appendExistingFile = false;
 				} else {
 					int indexOfDate = 0;
@@ -534,11 +481,10 @@ namespace TseClient {
 							isShamsiDate = true;
 						}
 					}
-					num = FileService.OutputFileLastDeven(instrument, indexOfDate, isShamsiDate);
+					outputFileLastDeven = FileService.OutputFileLastDeven(instrument, indexOfDate, isShamsiDate);
 				}
 			}
 			List<ColumnInfo> columnInfoList = FileService.ColumnsInfo();
-			Encoding utF8 = Encoding.UTF8;
 			Encoding encoding;
 			switch (Convert.ToInt32(settings.Encoding)) {
 				case 0:
@@ -554,21 +500,23 @@ namespace TseClient {
 					encoding = Encoding.UTF8;
 					break;
 			}
-			TextWriter textWriter = (TextWriter)new StreamWriter(str1 + "\\" + str4 + "." + settings.FileExtension, appendExistingFile, encoding);
+			TextWriter textWriter = (TextWriter)new StreamWriter(storageLocation + "\\" + filename + "." + settings.FileExtension, appendExistingFile, encoding);
 			columnInfoList.Sort((Comparison<ColumnInfo>)((s1, s2) => s1.Index.CompareTo(s2.Index)));
 			string str5 = "";
-			if (settings.ShowHeaders && num == 0) {
+			if (settings.ShowHeaders && outputFileLastDeven == 0) {
 				foreach (ColumnInfo columnInfo in columnInfoList) {
 					if (columnInfo.Visible) {
 						str5 += columnInfo.Header;
-						str5 += str2;
+						str5 += delimiter;
 					}
 				}
 				string str6 = str5.Substring(0, str5.Length - 1);
 				textWriter.WriteLine(str6);
 			}
+			string YMarNSC = instrument.YMarNSC;
+			int AdjustPricesCondition = settings.AdjustPricesCondition;
 			foreach (ClosingPriceInfo closingPriceInfo in cp) {
-				if ((!appendExistingFile || closingPriceInfo.DEven > num) && (settings.ExportDaysWithoutTrade || !(closingPriceInfo.ZTotTran == new Decimal(0)))) {
+				if ((!appendExistingFile || closingPriceInfo.DEven > outputFileLastDeven) && (settings.ExportDaysWithoutTrade || !(closingPriceInfo.ZTotTran == new Decimal(0)))) {
 					string str6 = "";
 					foreach (ColumnInfo columnInfo in columnInfoList) {
 						if (columnInfo.Visible) {
@@ -577,46 +525,13 @@ namespace TseClient {
 									str6 += instrument.CompanyCode.ToString();
 									break;
 								case ColumnType.LatinName:
-									str6 += instrument.LatinName.ToString();
-									if (instrument.YMarNSC != "ID") {
-										if (settings.AdjustPricesCondition == 1) {
-											str6 += "-a";
-											break;
-										}
-										if (settings.AdjustPricesCondition == 2) {
-											str6 += "-i";
-											break;
-										}
-										break;
-									}
+									str6 += instrument.LatinName.ToString() + FileService.GetSuffix(YMarNSC, AdjustPricesCondition);
 									break;
 								case ColumnType.Symbol:
-									str6 += instrument.Symbol.Replace(" ", "_").ToString();
-									if (instrument.YMarNSC != "ID") {
-										if (settings.AdjustPricesCondition == 1) {
-											str6 += "-ت";
-											break;
-										}
-										if (settings.AdjustPricesCondition == 2) {
-											str6 += "-ا";
-											break;
-										}
-										break;
-									}
+									str6 += instrument.Symbol.Replace(" ", "_").ToString() + FileService.GetSuffix(YMarNSC, AdjustPricesCondition, true);
 									break;
 								case ColumnType.Name:
-									str6 += instrument.Name.Replace(" ", "_").ToString();
-									if (instrument.YMarNSC != "ID") {
-										if (settings.AdjustPricesCondition == 1) {
-											str6 += "-ت";
-											break;
-										}
-										if (settings.AdjustPricesCondition == 2) {
-											str6 += "-ا";
-											break;
-										}
-										break;
-									}
+									str6 += instrument.Name.Replace(" ", "_").ToString() + FileService.GetSuffix(YMarNSC, AdjustPricesCondition, true);
 									break;
 								case ColumnType.Date:
 									str6 += closingPriceInfo.DEven.ToString();
@@ -652,7 +567,7 @@ namespace TseClient {
 									str6 += closingPriceInfo.PriceYesterday.ToString();
 									break;
 							}
-							str6 += str2;
+							str6 += delimiter;
 						}
 					}
 					string str7 = str6.Substring(0, str6.Length - 1);
@@ -767,10 +682,7 @@ namespace TseClient {
 			}
 		}
 
-		public static int OutputFileLastDeven(
-			InstrumentInfo instrument,
-			int indexOfDate,
-			bool isShamsiDate) {
+		public static int OutputFileLastDeven(InstrumentInfo instrument, int indexOfDate, bool isShamsiDate) {
 			FileService.CheckAppFolder();
 			int num = 0;
 			try {
