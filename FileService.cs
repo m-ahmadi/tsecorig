@@ -371,12 +371,11 @@ namespace TseClient {
 
 		public static void WriteClosingPrices(List<ClosingPriceInfo> input) {
 			FileService.CheckAppFolder();
-			if (input.Count == 0)
-				return;
-			string str = input[0].InsCode.ToString();
-			List<ClosingPriceInfo> closingPriceInfoList1 = new List<ClosingPriceInfo>();
+			if (input.Count == 0) return;
+			string insCode = input[0].InsCode.ToString();
+			//List<ClosingPriceInfo> closingPriceInfoList1 = new List<ClosingPriceInfo>(); // unused
 			List<ClosingPriceInfo> closingPriceInfoList2 = new List<ClosingPriceInfo>();
-			List<ClosingPriceInfo> closingPriceInfoList3 = FileService.ClosingPrices(Convert.ToInt64(str));
+			List<ClosingPriceInfo> closingPriceInfoList3 = FileService.ClosingPrices(Convert.ToInt64(insCode));
 			foreach (ClosingPriceInfo closingPriceInfo in input)
 				closingPriceInfoList2.Add(closingPriceInfo);
 			using (List<ClosingPriceInfo>.Enumerator enumerator = closingPriceInfoList3.GetEnumerator()) {
@@ -387,7 +386,7 @@ namespace TseClient {
 				}
 			}
 			closingPriceInfoList2.Sort((Comparison<ClosingPriceInfo>)((s1, s2) => s1.DEven.CompareTo(s2.DEven)));
-			using (TextWriter text = (TextWriter)File.CreateText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\Instruments\\" + str + ".csv")) {
+			using (TextWriter text = File.CreateText(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\Instruments\\" + insCode + ".csv")) {
 				foreach (ClosingPriceInfo closingPriceInfo in closingPriceInfoList2) {
 					text.Write(closingPriceInfo.InsCode);
 					text.Write(',');
