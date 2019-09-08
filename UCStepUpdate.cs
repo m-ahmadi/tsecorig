@@ -234,13 +234,13 @@ namespace TseClient {
 					this.lblProgress.Text = "0%";
 					Application.DoEvents();
 				}
-				string str1 = "";
+				string lastPossibleDeven = "";
 				try {
-					str1 = ServerMethods.LastPossibleDeven();
+					lastPossibleDeven = ServerMethods.LastPossibleDeven();
 				} catch (Exception ex) {
 					ServerMethods.LogError("lastPossibleDEvens", ex);
 				}
-				if (str1.Equals("*")) {
+				if (lastPossibleDeven.Equals("*")) {
 					if (this.isVisual) {
 						this.rtbOperationLog.AppendText("\n\tبروز رسانی اطلاعات در حد فاصل ساعت هشت صبح تا یک بعد از ظهر روزهای شنبه تا چهارشنبه امکان پذیر نمی باشد.");
 						this.rtbOperationLog.AppendText("\n\tجهت ساخت فایلها با اطلاعات فعلی از دکمه تعبیه شده در پایین صفحه استفاده کنید.");
@@ -249,7 +249,7 @@ namespace TseClient {
 					}
 					return false;
 				}
-				string[] strArray1 = str1.Split(';');
+				string[] strArray1 = lastPossibleDeven.Split(';');
 				int int32_1 = Convert.ToInt32(strArray1[0]);
 				int int32_2 = Convert.ToInt32(strArray1[1]);
 				long[][] numArray1 = new long[StaticData.SelectedInstruments.Count][];
@@ -272,7 +272,7 @@ namespace TseClient {
 				for (int index2 = 0; index2 < num1; ++index2) {
 					int length = index2 < num1 - 1 ? 20 : index1 % 20;
 					if (this.isVisual) {
-						this.rtbOperationLog.AppendText("\n\tدریافت بخش " + (index2 + 1).ToString() + " از " + (object)num1 + " اطلاعات ... ");
+						this.rtbOperationLog.AppendText("\n\tدریافت بخش " + (index2 + 1).ToString() + " از " + num1 + " اطلاعات ... ");
 						this.rtbOperationLog.SelectionStart = this.rtbOperationLog.Text.Length;
 						this.rtbOperationLog.ScrollToCaret();
 						Application.DoEvents();
@@ -292,7 +292,7 @@ namespace TseClient {
 					}
 					string str2 = "";
 					foreach (long[] numArray3 in numArray2)
-						str2 = str2 + (object)numArray3[0] + "," + (object)numArray3[1] + "," + (object)numArray3[2] + ";";
+						str2 = str2 + numArray3[0] + "," + numArray3[1] + "," + numArray3[2] + ";";
 					string insturmentClosingPrice = ServerMethods.GetInsturmentClosingPrice(str2.Substring(0, str2.Length - 1));
 					if (insturmentClosingPrice.Equals("*")) {
 						if (this.isVisual) {
