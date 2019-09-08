@@ -462,9 +462,10 @@ namespace TseClient {
 			string delimiter = settings.Delimeter.ToString();
 			string filename = GetFilename(instrument, settings.FileName, settings.AdjustPricesCondition);
 			filename = SafeWinFilename(filename);
-			int outputFileLastDeven = 0;
+			string filepath = storageLocation + "\\" + filename + "." + settings.FileExtension;
+      int outputFileLastDeven = 0;
 			if (appendExistingFile) {
-				if (!File.Exists(storageLocation + "\\" + filename + "." + settings.FileExtension)) {
+				if ( !File.Exists(filepath) ) {
 					appendExistingFile = false;
 				} else {
 					int indexOfDate = 0;
@@ -500,78 +501,78 @@ namespace TseClient {
 					encoding = Encoding.UTF8;
 					break;
 			}
-			TextWriter textWriter = (TextWriter)new StreamWriter(storageLocation + "\\" + filename + "." + settings.FileExtension, appendExistingFile, encoding);
+			TextWriter textWriter = new StreamWriter(filepath, appendExistingFile, encoding);
 			columnInfoList.Sort((Comparison<ColumnInfo>)((s1, s2) => s1.Index.CompareTo(s2.Index)));
-			string str5 = "";
+			string headerRow = "";
 			if (settings.ShowHeaders && outputFileLastDeven == 0) {
 				foreach (ColumnInfo columnInfo in columnInfoList) {
 					if (columnInfo.Visible) {
-						str5 += columnInfo.Header;
-						str5 += delimiter;
+						headerRow += columnInfo.Header;
+						headerRow += delimiter;
 					}
 				}
-				string str6 = str5.Substring(0, str5.Length - 1);
-				textWriter.WriteLine(str6);
+				headerRow = headerRow.Substring(0, headerRow.Length - 1);
+				textWriter.WriteLine(headerRow);
 			}
 			string YMarNSC = instrument.YMarNSC;
 			int AdjustPricesCondition = settings.AdjustPricesCondition;
 			foreach (ClosingPriceInfo closingPriceInfo in cp) {
 				if ((!appendExistingFile || closingPriceInfo.DEven > outputFileLastDeven) && (settings.ExportDaysWithoutTrade || !(closingPriceInfo.ZTotTran == new Decimal(0)))) {
-					string str6 = "";
+					string str = "";
 					foreach (ColumnInfo columnInfo in columnInfoList) {
 						if (columnInfo.Visible) {
 							switch (columnInfo.Type) {
 								case ColumnType.CompanyCode:
-									str6 += instrument.CompanyCode.ToString();
+									str += instrument.CompanyCode.ToString();
 									break;
 								case ColumnType.LatinName:
-									str6 += instrument.LatinName.ToString() + FileService.GetSuffix(YMarNSC, AdjustPricesCondition);
+									str += instrument.LatinName.ToString() + GetSuffix(YMarNSC, AdjustPricesCondition);
 									break;
 								case ColumnType.Symbol:
-									str6 += instrument.Symbol.Replace(" ", "_").ToString() + FileService.GetSuffix(YMarNSC, AdjustPricesCondition, true);
+									str += instrument.Symbol.Replace(" ", "_").ToString() + GetSuffix(YMarNSC, AdjustPricesCondition, true);
 									break;
 								case ColumnType.Name:
-									str6 += instrument.Name.Replace(" ", "_").ToString() + FileService.GetSuffix(YMarNSC, AdjustPricesCondition, true);
+									str += instrument.Name.Replace(" ", "_").ToString() + GetSuffix(YMarNSC, AdjustPricesCondition, true);
 									break;
 								case ColumnType.Date:
-									str6 += closingPriceInfo.DEven.ToString();
+									str += closingPriceInfo.DEven.ToString();
 									break;
 								case ColumnType.ShamsiDate:
-									str6 += Utility.ConvertGregorianIntToJalaliInt(closingPriceInfo.DEven).ToString();
+									str += Utility.ConvertGregorianIntToJalaliInt(closingPriceInfo.DEven).ToString();
 									break;
 								case ColumnType.PriceFirst:
-									str6 += closingPriceInfo.PriceFirst.ToString();
+									str += closingPriceInfo.PriceFirst.ToString();
 									break;
 								case ColumnType.PriceMax:
-									str6 += closingPriceInfo.PriceMax.ToString();
+									str += closingPriceInfo.PriceMax.ToString();
 									break;
 								case ColumnType.PriceMin:
-									str6 += closingPriceInfo.PriceMin.ToString();
+									str += closingPriceInfo.PriceMin.ToString();
 									break;
 								case ColumnType.LastPrice:
-									str6 += closingPriceInfo.PDrCotVal.ToString();
+									str += closingPriceInfo.PDrCotVal.ToString();
 									break;
 								case ColumnType.ClosingPrice:
-									str6 += closingPriceInfo.PClosing.ToString();
+									str += closingPriceInfo.PClosing.ToString();
 									break;
 								case ColumnType.Price:
-									str6 += closingPriceInfo.QTotCap.ToString();
+									str += closingPriceInfo.QTotCap.ToString();
 									break;
 								case ColumnType.Volume:
-									str6 += closingPriceInfo.QTotTran5J.ToString();
+									str += closingPriceInfo.QTotTran5J.ToString();
 									break;
 								case ColumnType.Count:
-									str6 += closingPriceInfo.ZTotTran.ToString();
+									str += closingPriceInfo.ZTotTran.ToString();
 									break;
 								case ColumnType.PriceYesterday:
-									str6 += closingPriceInfo.PriceYesterday.ToString();
+									str += closingPriceInfo.PriceYesterday.ToString();
 									break;
 							}
-							str6 += delimiter;
+							str += delimiter;
 						}
 					}
-					string str7 = str6.Substring(0, str6.Length - 1);
-					textWriter.WriteLine(str7);
+					str = str.Substring(0, str.Length - 1);
+					textWriter.WriteLine(str);
 				}
 			}
 			textWriter.Flush();
