@@ -604,18 +604,20 @@ namespace TseClient {
 			int num = 0;
 			try {
 				Settings settings = new Settings();
-				string str1 = settings.StorageLocation;
+				string storageLocation = settings.StorageLocation;
 				if (settings.AdjustPricesCondition == 1 || settings.AdjustPricesCondition == 2)
-					str1 = settings.AdjustedStorageLocation;
-				string filename = GetFilename(instrument, settings.FileName, settings.AdjustPricesCondition);
+					storageLocation = settings.AdjustedStorageLocation;
+				string ext = settings.FileExtension;
+        string filename = GetFilename(instrument, settings.FileName, settings.AdjustPricesCondition);
 				filename = SafeWinFilename(filename);
-				if (!File.Exists(str1 + "\\" + filename + "." + settings.FileExtension))
+				string filepath = storageLocation + "\\" + filename + "." + ext;
+        if ( !File.Exists(filepath) )
 					return 0;
-				using (StreamReader streamReader = new StreamReader((Stream)File.OpenRead(str1 + "\\" + filename + "." + settings.FileExtension))) {
-					string str4 = "";
+				using (StreamReader streamReader = new StreamReader(File.OpenRead(filepath))) {
+					string str = "";
 					while (!streamReader.EndOfStream)
-						str4 = streamReader.ReadLine();
-					string[] strArray = str4.Split(',');
+						str = streamReader.ReadLine();
+					string[] strArray = str.Split(',');
 					num = isShamsiDate ? Utility.ConvertJalaliStringToGregorianInt(strArray[indexOfDate].ToString()) : Convert.ToInt32(strArray[indexOfDate].ToString());
 				}
 			} catch (Exception ex) {
