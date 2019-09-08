@@ -686,99 +686,11 @@ namespace TseClient {
 			FileService.CheckAppFolder();
 			int num = 0;
 			try {
-				// ISSUE: object of a compiler-generated type is created
-				// ISSUE: variable of a compiler-generated type
 				Settings settings = new Settings();
 				string str1 = settings.StorageLocation;
 				if (settings.AdjustPricesCondition == 1 || settings.AdjustPricesCondition == 2)
 					str1 = settings.AdjustedStorageLocation;
-				string str2;
-				switch (Convert.ToInt32(settings.FileName)) {
-					case 0:
-						str2 = instrument.CIsin;
-						if (instrument.YMarNSC != "ID") {
-							if (settings.AdjustPricesCondition == 1) {
-								str2 += "-a";
-								break;
-							}
-							if (settings.AdjustPricesCondition == 2) {
-								str2 += "-i";
-								break;
-							}
-							break;
-						}
-						break;
-					case 1:
-						str2 = instrument.LatinName;
-						if (instrument.YMarNSC != "ID") {
-							if (settings.AdjustPricesCondition == 1) {
-								str2 += "-a";
-								break;
-							}
-							if (settings.AdjustPricesCondition == 2) {
-								str2 += "-i";
-								break;
-							}
-							break;
-						}
-						break;
-					case 2:
-						str2 = instrument.LatinSymbol;
-						if (instrument.YMarNSC != "ID") {
-							if (settings.AdjustPricesCondition == 1) {
-								str2 += "-a";
-								break;
-							}
-							if (settings.AdjustPricesCondition == 2) {
-								str2 += "-i";
-								break;
-							}
-							break;
-						}
-						break;
-					case 3:
-						str2 = instrument.Name;
-						if (instrument.YMarNSC != "ID") {
-							if (settings.AdjustPricesCondition == 1) {
-								str2 += "-ت";
-								break;
-							}
-							if (settings.AdjustPricesCondition == 2) {
-								str2 += "-ا";
-								break;
-							}
-							break;
-						}
-						break;
-					case 4:
-						str2 = instrument.Symbol;
-						if (instrument.YMarNSC != "ID") {
-							if (settings.AdjustPricesCondition == 1) {
-								str2 += "-ت";
-								break;
-							}
-							if (settings.AdjustPricesCondition == 2) {
-								str2 += "-ا";
-								break;
-							}
-							break;
-						}
-						break;
-					default:
-						str2 = instrument.CIsin;
-						if (instrument.YMarNSC != "ID") {
-							if (settings.AdjustPricesCondition == 1) {
-								str2 += "-a";
-								break;
-							}
-							if (settings.AdjustPricesCondition == 2) {
-								str2 += "-i";
-								break;
-							}
-							break;
-						}
-						break;
-				}
+				string str2 = FileService.GetFilename(instrument, settings.FileName, settings.AdjustPricesCondition);
 				string str3 = str2.Replace('\\', ' ').Replace('/', ' ').Replace('*', ' ').Replace(':', ' ').Replace('>', ' ').Replace('<', ' ').Replace('?', ' ').Replace('|', ' ').Replace('^', ' ').Replace('"', ' ');
 				if (!File.Exists(str1 + "\\" + str3 + "." + settings.FileExtension))
 					return 0;
