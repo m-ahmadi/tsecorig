@@ -322,24 +322,6 @@ namespace TseClient {
 			}
 		}
 
-		public static int LastDeven(string insCode) {
-			FileService.CheckAppFolder();
-			int num = 0;
-			try {
-				string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\Instruments\\" + insCode + ".csv";
-        if ( !File.Exists(path) )
-					return 0;
-				using ( StreamReader streamReader = new StreamReader(File.OpenRead(path)) ) {
-					string str = "";
-					while (!streamReader.EndOfStream)
-						str = streamReader.ReadLine();
-					num = Convert.ToInt32(str.Split(',')[1].ToString());
-				}
-			} catch (Exception ex) {
-			}
-			return num;
-		}
-
 		public static List<ClosingPriceInfo> ClosingPrices(long insCode) {
 			FileService.CheckAppFolder();
 			List<ClosingPriceInfo> closingPriceInfoList = new List<ClosingPriceInfo>();
@@ -452,6 +434,50 @@ namespace TseClient {
 					break;
 			}
 			return filename;
+		}
+
+		public static int LastDeven(string insCode) {
+			FileService.CheckAppFolder();
+			int num = 0;
+			try {
+				string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\Instruments\\" + insCode + ".csv";
+				if (!File.Exists(path))
+					return 0;
+				using (StreamReader streamReader = new StreamReader(File.OpenRead(path))) {
+					string str = "";
+					while (!streamReader.EndOfStream)
+						str = streamReader.ReadLine();
+					num = Convert.ToInt32(str.Split(',')[1].ToString());
+				}
+			} catch (Exception ex) {
+			}
+			return num;
+		}
+
+		public static int OutputFileLastDeven(InstrumentInfo instrument, int indexOfDate, bool isShamsiDate) {
+			FileService.CheckAppFolder();
+			int num = 0;
+			try {
+				Settings settings = new Settings();
+				string storageLocation = settings.StorageLocation;
+				if (settings.AdjustPricesCondition == 1 || settings.AdjustPricesCondition == 2)
+					storageLocation = settings.AdjustedStorageLocation;
+				string ext = settings.FileExtension;
+				string filename = GetFilename(instrument, settings.FileName, settings.AdjustPricesCondition);
+				filename = SafeWinFilename(filename);
+				string filepath = storageLocation + "\\" + filename + "." + ext;
+				if (!File.Exists(filepath))
+					return 0;
+				using (StreamReader streamReader = new StreamReader(File.OpenRead(filepath))) {
+					string str = "";
+					while (!streamReader.EndOfStream)
+						str = streamReader.ReadLine();
+					string[] strArray = str.Split(',');
+					num = isShamsiDate ? Utility.ConvertJalaliStringToGregorianInt(strArray[indexOfDate].ToString()) : Convert.ToInt32(strArray[indexOfDate].ToString());
+				}
+			} catch (Exception ex) {
+			}
+			return num;
 		}
 
 		public static void WriteOutputFile(InstrumentInfo instrument, List<ClosingPriceInfo> cp, bool appendExistingFile) {
@@ -599,32 +625,6 @@ namespace TseClient {
 					File.Delete(targetPath);
 				}
 			}
-		}
-
-		public static int OutputFileLastDeven(InstrumentInfo instrument, int indexOfDate, bool isShamsiDate) {
-			FileService.CheckAppFolder();
-			int num = 0;
-			try {
-				Settings settings = new Settings();
-				string storageLocation = settings.StorageLocation;
-				if (settings.AdjustPricesCondition == 1 || settings.AdjustPricesCondition == 2)
-					storageLocation = settings.AdjustedStorageLocation;
-				string ext = settings.FileExtension;
-        string filename = GetFilename(instrument, settings.FileName, settings.AdjustPricesCondition);
-				filename = SafeWinFilename(filename);
-				string filepath = storageLocation + "\\" + filename + "." + ext;
-        if ( !File.Exists(filepath) )
-					return 0;
-				using (StreamReader streamReader = new StreamReader(File.OpenRead(filepath))) {
-					string str = "";
-					while (!streamReader.EndOfStream)
-						str = streamReader.ReadLine();
-					string[] strArray = str.Split(',');
-					num = isShamsiDate ? Utility.ConvertJalaliStringToGregorianInt(strArray[indexOfDate].ToString()) : Convert.ToInt32(strArray[indexOfDate].ToString());
-				}
-			} catch (Exception ex) {
-			}
-			return num;
 		}
 
 		public static void WriteOutputExcel(InstrumentInfo instrument, List<ClosingPriceInfo> cp) {
@@ -856,9 +856,10 @@ namespace TseClient {
 
 		public static void EraseCurrentFiles() {
 			FileService.CheckAppFolder();
-			foreach (FileSystemInfo file in new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\Instruments").GetFiles())
+			string filepath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\Instruments";
+      foreach (FileSystemInfo file in new DirectoryInfo(filepath).GetFiles())
 				file.Delete();
-			FileInfo fileInfo = new FileInfo(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\TseClient 2.0\\Files\\Instruments.csv");
+			FileInfo fileInfo = new FileInfo(filepath);
 			fileInfo.Delete();
 			fileInfo.Create();
 		}
