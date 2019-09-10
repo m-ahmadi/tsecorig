@@ -55,12 +55,10 @@ namespace TseClient {
 		}
 
 		public bool UpdateInstruments() {
-			// ISSUE: object of a compiler-generated type is created
-			// ISSUE: variable of a compiler-generated type
 			Settings settings = new Settings();
-			string str1 = FileService.ReadVersionFileContent();
+			string version = FileService.ReadVersionFileContent();
 			if (this.isVisual) {
-				if (!StaticData.Version.Equals(str1) && StaticData.Instruments.Count != 0) {
+				if (!StaticData.Version.Equals(version) && StaticData.Instruments.Count != 0) {
 					int num = (int)new ConfirmationForm("ویرایش جدید نرم افزار نصب گردید. بانک اطلاعاتی قیمت ها  که توسط نرم افزار \nویرایش قبلی ساخته شده موجود می باشد. در صورتی که با داده های قبلی مشکل دارید\n( و یا کامل نیست ) اطلاعات را با انتخاب دکمه «بلی» حذف کنید.\nدر غیر اینصورت کلید «خیر» را انتخاب کنید.\nتوجه : شما در هر زمان که مایل باشید می توانید بانک اطلاعاتی را از طریق کلید \n«پاک کردن اطلاعات» در بخش تنظیمات حذف کرده و مجددا داده های جدید را دریافت کنید.\n", "شما می توانید در محیط Command Prompt دستور TseClient.exe fast را اجرا کنید\nدر اینصورت کلیه عملیات بروزرسانی و ایجاد فایلهای خروجی به صورت خودکار انجام خواهد شد.\n\nهمچنین امکان ایجاد خروجی تعدیل شده فقط با استفاده از افزایش سرمایه\n به امکانات نرم افزار اضافه شده است").ShowDialog();
 					Application.DoEvents();
 					if (MainForm.ConfirmationResult) {
@@ -74,9 +72,9 @@ namespace TseClient {
 				} else if (StaticData.Instruments.Count == 0)
 					FileService.WriteVersionFileContent(StaticData.Version);
 			}
-			if (Utility.ConvertDateTimeToGregorianInt(DateTime.Now) == settings.LastInstrumentReceiveDate) {
-				if (Utility.ConvertDateTimeToGregorianInt(DateTime.Now) != 20140217)
-					return true;
+			int now = Utility.ConvertDateTimeToGregorianInt(DateTime.Now);
+      if (now == settings.LastInstrumentReceiveDate && now != 20140217) {
+				return true;
 			}
 			try {
 				int lastDEven = 0;
