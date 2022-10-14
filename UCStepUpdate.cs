@@ -259,7 +259,7 @@ namespace TseClient {
 						string item = enumerator.Current;
 						int num = FileService.LastDeven(item);
 						InstrumentInfo instrumentInfo = StaticData.Instruments.Find((Predicate<InstrumentInfo>)(p => p.InsCode == Convert.ToInt64(item)));
-						if ((!(instrumentInfo.YMarNSC == "NO") || num != int32_1) && (!(instrumentInfo.YMarNSC == "ID") || num != int32_2)) {
+						if ((instrumentInfo.YMarNSC != "NO" || num != int32_1) && (instrumentInfo.YMarNSC != "ID" || num != int32_2)) {
 							numArray1[index1] = new long[3];
 							numArray1[index1][0] = Convert.ToInt64(item);
 							numArray1[index1][1] = Convert.ToInt64(num);
